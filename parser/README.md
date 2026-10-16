@@ -9,7 +9,7 @@ uv sync --extra test
 uv run pytest -q
 ```
 
-The parser accepts content-detected text, Markdown, CSV/TSV, JSON, safe XML, RTF, PDF, DOCX, XLSX, PPTX, ODT, ODS, and ODP. It rejects unsupported or unsafe containers and applies size, record, and extraction limits. XLSX formulas are returned as data; they are never evaluated.
+The parser accepts content-detected text, Markdown, CSV/TSV, JSON, safe XML, RTF, PDF, DOCX, XLSX, PPTX, ODT, ODS, and ODP. Strong Markdown syntax is checked before CSV structure; delimited text must contain multiple consistent rows. Comma, tab, and semicolon separators are supported. It rejects unsupported or unsafe containers and applies size, record, and extraction limits. XLSX formulas are returned as data; they are never evaluated.
 
 `omisa_parser.protocol` validates framed requests, file descriptors, peer credentials, and replay controls. `omisa_parser.service` copies the authorized input into a private job directory, starts a fixed worker, validates bounded JSONL output, and removes job files. The package's integration tests use local fixtures and stubs.
 
