@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+  <!-- Fail closed: retain Tika's default parser only with explicit exclusions.
+       OCR belongs exclusively to the bounded OcrAdapter. PackageParser and
+       owner-file parsing are excluded to prevent recursive package traversal. -->
+  <service-loader loadErrorHandler="THROW" initializableProblemHandler="THROW"/>
+  <parsers>
+    <parser class="org.apache.tika.parser.DefaultParser">
+      <parser-exclude class="org.apache.tika.parser.ocr.TesseractOCRParser"/>
+      <parser-exclude class="org.apache.tika.parser.pkg.PackageParser"/>
+      <parser-exclude class="org.apache.tika.parser.microsoft.MSOwnerFileParser"/>
+    </parser>
+  </parsers>
+  <fetchers>
+    <fetcher class="org.apache.tika.fetcher.http.HttpFetcher" exclude="true"/>
+  </fetchers>
+</properties>

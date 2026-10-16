@@ -1,0 +1,681 @@
+{
+  "architecture": "x86_64",
+  "format": "libseccomp-export-bpf",
+  "policies": {
+    "legacy": {
+      "file": "legacy.bpf",
+      "rules": [
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "accept",
+          "number": 43
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "accept4",
+          "number": 288
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "add_key",
+          "number": 248
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "bind",
+          "number": 49
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "bpf",
+          "number": 321
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "chroot",
+          "number": 161
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "connect",
+          "number": 42
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "delete_module",
+          "number": 176
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fanotify_init",
+          "number": 300
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "finit_module",
+          "number": 313
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsconfig",
+          "number": 431
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsmount",
+          "number": 432
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsopen",
+          "number": 430
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "init_module",
+          "number": 175
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_enter",
+          "number": 426
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_register",
+          "number": 427
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_setup",
+          "number": 425
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "kexec_file_load",
+          "number": 320
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "kexec_load",
+          "number": 246
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "keyctl",
+          "number": 250
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "listen",
+          "number": 50
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mknod",
+          "number": 133
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mknodat",
+          "number": 259
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mount",
+          "number": 165
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mount_setattr",
+          "number": 442
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "move_mount",
+          "number": 429
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "name_to_handle_at",
+          "number": 303
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "open_by_handle_at",
+          "number": 304
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "open_tree",
+          "number": 428
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "perf_event_open",
+          "number": 298
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "pivot_root",
+          "number": 155
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "process_vm_readv",
+          "number": 310
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "process_vm_writev",
+          "number": 311
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "ptrace",
+          "number": 101
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "reboot",
+          "number": 169
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "request_key",
+          "number": 249
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "setns",
+          "number": 308
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "socket",
+          "number": 41
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "socketpair",
+          "number": 53
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "swapoff",
+          "number": 168
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "swapon",
+          "number": 167
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "umount2",
+          "number": 166
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "unshare",
+          "number": 272
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "userfaultfd",
+          "number": 323
+        }
+      ]
+    },
+    "native": {
+      "file": "native.bpf",
+      "rules": [
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "accept",
+          "number": 43
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "accept4",
+          "number": 288
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "add_key",
+          "number": 248
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "bind",
+          "number": 49
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "bpf",
+          "number": 321
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "chroot",
+          "number": 161
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "connect",
+          "number": 42
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "delete_module",
+          "number": 176
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fanotify_init",
+          "number": 300
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "finit_module",
+          "number": 313
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsconfig",
+          "number": 431
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsmount",
+          "number": 432
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsopen",
+          "number": 430
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "init_module",
+          "number": 175
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_enter",
+          "number": 426
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_register",
+          "number": 427
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_setup",
+          "number": 425
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "kexec_file_load",
+          "number": 320
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "kexec_load",
+          "number": 246
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "keyctl",
+          "number": 250
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "listen",
+          "number": 50
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mknod",
+          "number": 133
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mknodat",
+          "number": 259
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mount",
+          "number": 165
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mount_setattr",
+          "number": 442
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "move_mount",
+          "number": 429
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "name_to_handle_at",
+          "number": 303
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "open_by_handle_at",
+          "number": 304
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "open_tree",
+          "number": 428
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "perf_event_open",
+          "number": 298
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "pivot_root",
+          "number": 155
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "process_vm_readv",
+          "number": 310
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "process_vm_writev",
+          "number": 311
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "ptrace",
+          "number": 101
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "reboot",
+          "number": 169
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "request_key",
+          "number": 249
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "setns",
+          "number": 308
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "socket",
+          "number": 41
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "socketpair",
+          "number": 53
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "swapoff",
+          "number": 168
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "swapon",
+          "number": 167
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "umount2",
+          "number": 166
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "unshare",
+          "number": 272
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "userfaultfd",
+          "number": 323
+        }
+      ]
+    },
+    "ocr": {
+      "file": "ocr.bpf",
+      "rules": [
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "accept",
+          "number": 43
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "accept4",
+          "number": 288
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "add_key",
+          "number": 248
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "bind",
+          "number": 49
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "bpf",
+          "number": 321
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "chroot",
+          "number": 161
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "connect",
+          "number": 42
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "delete_module",
+          "number": 176
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fanotify_init",
+          "number": 300
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "finit_module",
+          "number": 313
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsconfig",
+          "number": 431
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsmount",
+          "number": 432
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "fsopen",
+          "number": 430
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "init_module",
+          "number": 175
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_enter",
+          "number": 426
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_register",
+          "number": 427
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "io_uring_setup",
+          "number": 425
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "kexec_file_load",
+          "number": 320
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "kexec_load",
+          "number": 246
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "keyctl",
+          "number": 250
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "listen",
+          "number": 50
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mknod",
+          "number": 133
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mknodat",
+          "number": 259
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mount",
+          "number": 165
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "mount_setattr",
+          "number": 442
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "move_mount",
+          "number": 429
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "name_to_handle_at",
+          "number": 303
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "open_by_handle_at",
+          "number": 304
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "open_tree",
+          "number": 428
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "perf_event_open",
+          "number": 298
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "pivot_root",
+          "number": 155
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "process_vm_readv",
+          "number": 310
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "process_vm_writev",
+          "number": 311
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "ptrace",
+          "number": 101
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "reboot",
+          "number": 169
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "request_key",
+          "number": 249
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "setns",
+          "number": 308
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "socket",
+          "number": 41
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "socketpair",
+          "number": 53
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "swapoff",
+          "number": 168
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "swapon",
+          "number": 167
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "umount2",
+          "number": 166
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "unshare",
+          "number": 272
+        },
+        {
+          "action": "ERRNO(EPERM)",
+          "name": "userfaultfd",
+          "number": 323
+        }
+      ]
+    }
+  }
+}

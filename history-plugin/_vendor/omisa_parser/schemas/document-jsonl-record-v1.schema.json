@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omisa.invalid/schema/document-jsonl-record-v1.json",
+  "title": "One Omisa document JSONL record v1",
+  "$defs": {
+    "base": {
+      "type": "object",
+      "required": ["schema", "type"],
+      "properties": {
+        "schema": {"const": "omisa.document/1"},
+        "type": {"type": "string"}
+      }
+    },
+    "id": {"type": "string", "pattern": "^[ubtnl][1-9][0-9]{0,8}$"},
+    "bbox": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {"type": "number", "minimum": 0, "maximum": 1000000}
+    },
+    "warning": {
+      "type": "object", "additionalProperties": false, "required": ["code", "count"],
+      "properties": {"code": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$"}, "count": {"type": "integer", "minimum": 1}}
+    }
+  },
+  "oneOf": [
+    {
+      "allOf": [{"$ref": "#/$defs/base"}, {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema", "type", "request_id", "document", "parser", "structure", "warnings"],
+        "properties": {
+          "schema": {"const": "omisa.document/1"}, "type": {"const": "document"},
+          "request_id": {"type": "string", "pattern": "^[a-f0-9]{32}$"},
+          "document": {
+            "type": "object", "additionalProperties": false,
+            "required": ["detected_format", "media_type", "size_bytes", "title", "language"],
+            "properties": {
+              "detected_format": {"type": "string", "pattern": "^[a-z0-9]{1,16}$"},
+              "media_type": {"type": "string", "maxLength": 127},
+              "size_bytes": {"type": "integer", "minimum": 1, "maximum": 20971520},
+              "title": {"type": ["string", "null"], "maxLength": 1024},
+              "language": {"type": ["string", "null"], "maxLength": 35}
+            }
+          },
+          "parser": {
+            "type": "object", "additionalProperties": false, "required": ["bundle_version", "registry_version"],
+            "properties": {"bundle_version": {"type": "string", "maxLength": 64}, "registry_version": {"type": "integer", "minimum": 1}}
+          },
+          "structure": {
+            "type": "object", "additionalProperties": false, "required": ["unit", "unit_count"],
+            "properties": {"unit": {"enum": ["page", "sheet", "slide", "message", "image"]}, "unit_count": {"type": ["integer", "null"], "minimum": 0}, "pagination": {"enum": ["native", "rendered", "logical"]}}
+          },
+          "warnings": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/warning"}}
+        }
+      }]
+    },
+    {
+      "allOf": [{"$ref": "#/$defs/base"}, {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema", "type", "id", "unit_kind", "index", "label", "parent_id"],
+        "properties": {
+          "schema": {"const": "omisa.document/1"}, "type": {"const": "unit"}, "id": {"$ref": "#/$defs/id"},
+          "unit_kind": {"enum": ["page", "sheet", "slide", "message", "image"]}, "index": {"type": "integer", "minimum": 1},
+          "label": {"type": ["string", "null"], "maxLength": 256}, "parent_id": {"oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+          "hidden": {"type": "boolean"},
+          "dimensions": {"type": "object", "additionalProperties": false, "required": ["width_pt", "height_pt"], "properties": {"width_pt": {"type": "number", "exclusiveMinimum": 0}, "height_pt": {"type": "number", "exclusiveMinimum": 0}}}
+        }
+      }]
+    },
+    {
+      "allOf": [{"$ref": "#/$defs/base"}, {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema", "type", "id", "unit_id", "order", "text", "source", "truncated"],
+        "properties": {
+          "schema": {"const": "omisa.document/1"}, "type": {"const": "text"}, "id": {"$ref": "#/$defs/id"}, "unit_id": {"$ref": "#/$defs/id"},
+          "order": {"type": "integer", "minimum": 1}, "text": {"type": "string", "maxLength": 65536}, "source": {"enum": ["native", "rendered", "ocr"]},
+          "bbox": {"$ref": "#/$defs/bbox"}, "confidence": {"type": "number", "minimum": 0, "maximum": 1}, "truncated": {"type": "boolean"},
+          "style": {"type": "object", "additionalProperties": false, "properties": {"role": {"enum": ["heading", "paragraph", "list", "caption", "header", "footer", "code", "other"]}, "level": {"type": "integer", "minimum": 1, "maximum": 9}}}
+        }
+      }]
+    },
+    {
+      "allOf": [{"$ref": "#/$defs/base"}, {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema", "type", "id", "unit_id", "order", "caption", "row_count", "column_count", "columns", "cells", "truncated"],
+        "properties": {
+          "schema": {"const": "omisa.document/1"}, "type": {"const": "table"}, "id": {"$ref": "#/$defs/id"}, "unit_id": {"$ref": "#/$defs/id"}, "order": {"type": "integer", "minimum": 1},
+          "caption": {"type": ["string", "null"], "maxLength": 4096}, "row_count": {"type": ["integer", "null"], "minimum": 0}, "row_start": {"type": "integer", "minimum": 1, "maximum": 10000}, "row_end": {"type": "integer", "minimum": 1, "maximum": 10000}, "column_count": {"type": ["integer", "null"], "minimum": 0, "maximum": 256},
+          "columns": {"type": "array", "maxItems": 256, "items": {"type": "object", "additionalProperties": false, "required": ["index", "label"], "properties": {"index": {"type": "integer", "minimum": 1, "maximum": 256}, "label": {"type": ["string", "null"], "maxLength": 1024}}}},
+          "cells": {"type": "array", "maxItems": 1000000, "items": {
+            "type": "object", "additionalProperties": false, "required": ["r", "c", "row_span", "col_span", "value", "formula"],
+            "properties": {
+              "r": {"type": "integer", "minimum": 1, "maximum": 10000}, "c": {"type": "integer", "minimum": 1, "maximum": 256}, "row_span": {"type": "integer", "minimum": 1}, "col_span": {"type": "integer", "minimum": 1},
+              "value": {"type": "object", "additionalProperties": false, "required": ["kind", "display", "raw"], "properties": {"kind": {"enum": ["blank", "string", "number", "boolean", "date", "error"]}, "display": {"type": ["string", "null"], "maxLength": 65536}, "raw": {"type": ["string", "null"], "maxLength": 65536}}},
+              "formula": {"type": ["string", "null"], "maxLength": 65536}, "bbox": {"$ref": "#/$defs/bbox"}
+            }
+          }},
+          "truncated": {"type": "boolean"}
+        }
+      }]
+    },
+    {
+      "allOf": [{"$ref": "#/$defs/base"}, {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema", "type", "id", "unit_id", "order", "note_kind", "text", "truncated"],
+        "properties": {"schema": {"const": "omisa.document/1"}, "type": {"const": "note"}, "id": {"$ref": "#/$defs/id"}, "unit_id": {"$ref": "#/$defs/id"}, "order": {"type": "integer", "minimum": 1}, "note_kind": {"enum": ["speaker_note", "comment", "footnote", "endnote"]}, "text": {"type": "string", "maxLength": 65536}, "truncated": {"type": "boolean"}}
+      }]
+    },
+    {
+      "allOf": [{"$ref": "#/$defs/base"}, {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema", "type", "id", "unit_id", "order", "text", "target", "external"],
+        "properties": {
+          "schema": {"const": "omisa.document/1"}, "type": {"const": "link"}, "id": {"$ref": "#/$defs/id"}, "unit_id": {"$ref": "#/$defs/id"}, "order": {"type": "integer", "minimum": 1}, "text": {"type": ["string", "null"], "maxLength": 4096},
+          "target": {"type": "object", "additionalProperties": false, "required": ["scheme", "host", "path", "redacted"], "properties": {"scheme": {"enum": ["http", "https", "mailto"]}, "host": {"type": ["string", "null"], "maxLength": 253}, "path": {"type": ["string", "null"], "maxLength": 2048}, "redacted": {"const": true}}},
+          "external": {"type": "boolean"}
+        }
+      }]
+    },
+    {
+      "allOf": [{"$ref": "#/$defs/base"}, {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema", "type", "request_id", "status", "counts", "truncated", "limit_reason", "warnings"],
+        "properties": {
+          "schema": {"const": "omisa.document/1"}, "type": {"const": "end"}, "request_id": {"type": "string", "pattern": "^[a-f0-9]{32}$"}, "status": {"const": "ok"},
+          "counts": {"type": "object", "additionalProperties": false, "required": ["units_emitted", "records_emitted", "text_chars", "tables", "cells"], "properties": {"units_emitted": {"type": "integer", "minimum": 0}, "records_emitted": {"type": "integer", "minimum": 0, "maximum": 501}, "text_chars": {"type": "integer", "minimum": 0, "maximum": 5000000}, "tables": {"type": "integer", "minimum": 0}, "cells": {"type": "integer", "minimum": 0, "maximum": 1000000}}},
+          "truncated": {"type": "boolean"}, "limit_reason": {"type": ["string", "null"], "enum": [null, "records", "output_bytes", "text_chars", "units", "rows", "cells", "requested_range"]}, "warnings": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/warning"}}
+        }
+      }]
+    },
+    {
+      "allOf": [{"$ref": "#/$defs/base"}, {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema", "type", "request_id", "status", "code", "retryable", "stage"],
+        "properties": {
+          "schema": {"const": "omisa.document/1"}, "type": {"const": "error"}, "request_id": {"type": "string", "pattern": "^[a-f0-9]{32}$"}, "status": {"const": "error"},
+          "code": {"enum": ["invalid_request", "unauthorized", "artifact_expired", "artifact_revoked", "artifact_changed", "input_too_large", "unsupported_format", "encrypted_document", "malformed_document", "archive_policy_violation", "active_content_policy", "resource_limit", "timeout", "busy", "parser_failed", "output_limit"]},
+          "retryable": {"type": "boolean"}, "stage": {"enum": ["authorization", "broker", "preflight", "extract", "render", "ocr", "output"]}
+        }
+      }]
+    }
+  ]
+}

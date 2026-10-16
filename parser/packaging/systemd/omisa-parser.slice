@@ -1,0 +1,10 @@
+[Unit]
+Description=Aggregate limits for Omisa parser staging jobs
+
+[Slice]
+MemoryHigh=1G
+MemoryMax=1280M
+MemorySwapMax=0
+TasksMax=40
+CPUQuota=150%
+CPUQuotaPeriodSec=100ms

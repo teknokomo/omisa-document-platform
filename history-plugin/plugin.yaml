@@ -1,0 +1,4 @@
+name: omisa-history
+version: 1.0.0
+description: "Bounded, scope-derived MAX message history search and exact fetch"
+kind: backend

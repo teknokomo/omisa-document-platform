@@ -1,0 +1,17 @@
+[Unit]
+Description=Omisa archive inspection broker socket
+
+[Socket]
+ListenStream=/run/omisa-archive/archive.sock
+SocketUser=@GATEWAY_USER@
+SocketGroup=@GATEWAY_GROUP@
+SocketMode=0600
+DirectoryMode=0711
+Accept=yes
+MaxConnections=4
+Backlog=4
+RemoveOnStop=yes
+Service=omisa-archive@.service
+
+[Install]
+WantedBy=sockets.target

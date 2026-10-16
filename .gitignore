@@ -1,0 +1,16 @@
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.venv/
+**/venv/
+**/*.egg-info/
+**/--help/
+*.db
+*.db-*
+.env
+.env.*
+!.env.example
+.local/
+# The versioned seccomp policies are package inputs; keep their checksums with them.
+!parser/packaging/seccomp/out/
+!parser/packaging/seccomp/out/**

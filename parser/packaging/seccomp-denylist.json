@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "status": "source-policy-not-compiled",
+  "default_action": "allow",
+  "deny": [
+    "connect", "bind", "listen", "accept", "accept4", "mount", "umount2", "pivot_root",
+    "unshare", "setns", "bpf", "perf_event_open", "ptrace", "process_vm_readv",
+    "process_vm_writev", "kexec_load", "kexec_file_load", "reboot", "add_key", "request_key",
+    "keyctl", "open_by_handle_at", "name_to_handle_at", "fanotify_init", "io_uring_setup",
+    "io_uring_enter", "io_uring_register", "userfaultfd", "fsopen", "fsconfig", "fsmount",
+    "move_mount", "open_tree", "mount_setattr", "mknod", "mknodat", "init_module",
+    "finit_module", "delete_module"
+  ]
+}

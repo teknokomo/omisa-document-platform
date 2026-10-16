@@ -1,0 +1,17 @@
+[Unit]
+Description=Omisa archive break-glass worker socket
+
+[Socket]
+ListenStream=/run/omisa-archive-breakglass-worker/archive.sock
+SocketUser=root
+SocketGroup=root
+SocketMode=0600
+DirectoryMode=0700
+Accept=yes
+MaxConnections=4
+Backlog=4
+RemoveOnStop=yes
+Service=omisa-archive-breakglass-worker@.service
+
+[Install]
+WantedBy=sockets.target

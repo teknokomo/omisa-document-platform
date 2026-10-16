@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+export PYTHONPATH=/usr/lib/omisa-parser/app:/usr/lib/omisa-parser/rootfs/app/vendor
+exec /opt/omisa-venv/bin/python3 -c 'import os,socket,sys;from pathlib import Path;from omisa_parser.archive_service import ArchiveService,ArchiveConfig;c=socket.socket(fileno=os.dup(0));ArchiveService(ArchiveConfig(int(sys.argv[1]),Path(sys.argv[2]))).handle(c)' "$@"

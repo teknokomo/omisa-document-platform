@@ -1,0 +1,44 @@
+[Unit]
+Description=Omisa audited archive break-glass coordinator connection %i
+CollectMode=inactive-or-failed
+Requires=omisa-parser-breakglass.socket omisa-archive-breakglass-worker.socket
+After=omisa-parser-breakglass.socket omisa-archive-breakglass-worker.socket
+
+[Service]
+Type=exec
+User=root
+Group=root
+StandardInput=socket
+StandardOutput=socket
+StandardError=journal
+UMask=0077
+NoNewPrivileges=yes
+PrivateNetwork=yes
+PrivateIPC=yes
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/omisa-breakglass
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+LimitCORE=0
+LimitNOFILE=40
+LimitNPROC=8
+TasksMax=8
+MemoryMax=256M
+RuntimeMaxSec=200s
+TimeoutStopSec=3s
+KillMode=control-group
+Slice=omisa-parser.slice
+ExecStart=/opt/omisa-venv/bin/python3 -c 'import sys;sys.path.insert(0,"/usr/lib/omisa-parser/app");from omisa_parser.archive_breakglass import coordinator_main;coordinator_main()' --systemd-stdio --state-dir=/var/lib/omisa-breakglass --allowed-uid=@GATEWAY_UID@ --parser-socket=/run/omisa-parser-breakglass/parser.sock --archive-socket=/run/omisa-archive-breakglass-worker/archive.sock

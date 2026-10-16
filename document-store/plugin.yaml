@@ -1,0 +1,8 @@
+name: omisa-document-store
+version: 1.0.0
+description: "Profile-scoped durable inbox and registry for explicitly significant Omisa documents."
+kind: backend
+provides_tools:
+  - document_save
+  - document_list
+  - document_get

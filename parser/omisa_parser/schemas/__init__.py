@@ -1,0 +1,1 @@
+"""Bundled immutable protocol schemas."""

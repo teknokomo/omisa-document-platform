@@ -1,0 +1,15 @@
+[Unit]
+Description=Omisa parser socket for audited break-glass coordinator
+
+[Socket]
+ListenStream=/run/omisa-parser-breakglass/parser.sock
+SocketUser=root
+SocketGroup=root
+SocketMode=0600
+DirectoryMode=0700
+RemoveOnStop=yes
+Accept=yes
+MaxConnections=4
+
+[Install]
+WantedBy=sockets.target

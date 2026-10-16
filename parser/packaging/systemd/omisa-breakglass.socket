@@ -1,0 +1,14 @@
+[Unit]
+Description=Omisa audited break-glass coordinator socket
+
+[Socket]
+ListenStream=/run/omisa-breakglass.sock
+SocketUser=root
+SocketGroup=omisa
+SocketMode=0660
+DirectoryMode=0750
+RemoveOnStop=yes
+Accept=yes
+
+[Install]
+WantedBy=sockets.target

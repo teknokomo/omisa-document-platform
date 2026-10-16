@@ -1,0 +1,18 @@
+[Unit]
+Description=Omisa parser one-connection socket
+
+[Socket]
+ListenStream=/run/omisa-parser/parser.sock
+SocketUser=@GATEWAY_USER@
+SocketGroup=@GATEWAY_GROUP@
+SocketMode=0600
+DirectoryMode=0711
+Accept=yes
+MaxConnections=1
+MaxConnectionsPerSource=1
+Backlog=4
+RemoveOnStop=yes
+Service=omisa-parser@.service
+
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,3 @@
+#!/bin/sh
+set -eu
+PYTHONPATH=/usr/lib/omisa-parser/app exec /opt/omisa-venv/bin/python3 -m omisa_parser.archive_breakglass "$@"

@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+# The broker runs on the host (not inside the bwrap sandbox) and only imports
+# omisa_parser.service/protocol/processes/core-headers, which need jsonschema and
+# defusedxml. Both are installed into the gateway venv alongside the history
+# plugin's own jsonschema dependency. The heavy parser libraries (PyMuPDF, etc.)
+# are resolved lazily by the worker inside the sandbox and are never needed here.
+export PYTHONPATH=/usr/lib/omisa-parser/app
+exec /opt/omisa-venv/bin/python3 -m omisa_parser.service "$@"

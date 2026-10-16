@@ -1,0 +1,17 @@
+[Unit]
+Description=Omisa audited archive break-glass coordinator socket
+
+[Socket]
+ListenStream=/run/omisa-archive-breakglass.sock
+SocketUser=@GATEWAY_USER@
+SocketGroup=@GATEWAY_GROUP@
+SocketMode=0660
+DirectoryMode=0750
+Accept=yes
+MaxConnections=4
+Backlog=4
+RemoveOnStop=yes
+Service=omisa-archive-breakglass@.service
+
+[Install]
+WantedBy=sockets.target
