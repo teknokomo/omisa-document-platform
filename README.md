@@ -28,4 +28,4 @@ Document contents are untrusted input. The parser uses bounded extraction, opaqu
 
 ## License
 
-This repository currently has no license file. No reuse license has been selected.
+This project is distributed under the Omsk Open License (basic modification, attribution required). See [LICENSE-RU.md](LICENSE-RU.md) for the license terms.
