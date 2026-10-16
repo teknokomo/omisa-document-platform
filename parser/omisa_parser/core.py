@@ -7,7 +7,7 @@ from typing import Any
 from defusedxml import ElementTree as SafeET
 
 SCHEMA = "omisa.document/1"
-BUNDLE = "2026.09.0-stage1"
+BUNDLE = "2026.10.16-md-detection.2"
 MEDIA = {
  'txt':'text/plain','md':'text/markdown','csv':'text/csv','json':'application/json','xml':'application/xml','rtf':'application/rtf','pdf':'application/pdf',
  'docx':'application/vnd.openxmlformats-officedocument.wordprocessingml.document','xlsx':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','pptx':'application/vnd.openxmlformats-officedocument.presentationml.presentation',
@@ -141,18 +141,45 @@ def _detect(path:Path, limits:Limits)->tuple[str,list[dict]]:
             with path.open('r',encoding='utf-8-sig') as stream: json.load(stream)
         except Exception: raise ParseError('malformed_document')
         return 'json',[]
-    lines=text.splitlines()
-    if lines and any(x in lines[0] for x in ',\t'):
-        try:
-            dialect=csv.Sniffer().sniff(text,delimiters=',\t;')
-            if len(list(csv.reader(io.StringIO(text),dialect)))>1:return 'csv',[]
-        except csv.Error:
-            # Sniffer may reject a bounded head ending midway through a huge
-            # field. A delimiter-bearing header plus a following line remains
-            # a conservative CSV candidate; extraction applies strict caps.
-            if len(lines)>1:return 'csv',[]
-    if re.search(r'(?m)^#{1,6}\s|^\|.*\|$',text):return 'md',[]
+    if _looks_like_markdown(text):return 'md',[]
+    if _detect_csv_delimiter(text) is not None:return 'csv',[]
+    if _looks_like_weak_markdown(text):return 'md',[]
     return 'txt',[]
+
+def _looks_like_markdown(text:str)->bool:
+    patterns=(
+        r'(?m)^ {0,3}#{1,6}\s',
+        r'(?m)^ {0,3}(?:```|~~~)',
+        r'(?m)^ {0,3}\|.*\|\s*$',
+    )
+    return any(re.search(pattern,text) for pattern in patterns)
+
+def _looks_like_weak_markdown(text:str)->bool:
+    # Lists and blockquotes can occur in CSV fields, so test them after CSV structure.
+    patterns=(
+        r'(?m)^ {0,3}(?:[-+*]|\d{1,9}[.)])\s+',
+        r'(?m)^ {0,3}>\s+',
+        r'(?m)^ {0,3}(?:---+|___+|\*\*\*+)\s*$',
+    )
+    return any(re.search(pattern,text) for pattern in patterns)
+
+def _detect_csv_delimiter(text:str)->str|None:
+    first_line=next((line for line in text.splitlines() if line.strip()),'')
+    for delimiter in (',','\t',';'):
+        if delimiter not in first_line:continue
+        try:
+            reader=csv.reader(io.StringIO(text,newline=''),delimiter=delimiter,strict=True)
+            rows=[]
+            for row in reader:
+                if not row or (len(row)==1 and not row[0].strip()):continue
+                rows.append(row)
+                if len(rows)==8:break
+        except csv.Error:
+            continue
+        if len(rows)<2:continue
+        widths={len(row) for row in rows}
+        if len(widths)==1 and next(iter(widths))>=2:return delimiter
+    return None
 
 def _zip_warnings(z,names):
     macro=sum(1 for n in names if n.lower().endswith(('vbaproject.bin','macros.xml')))
@@ -206,12 +233,12 @@ def _xml_text(path,limits):
     except Exception: raise ParseError('malformed_document')
     return ' '.join(parts)
 
-def _csv_rows(path,limits):
+def _csv_rows(path,limits,delimiter):
     rows=[]; cells=0
     old=csv.field_size_limit();csv.field_size_limit(limits.max_csv_field)
     try:
         with path.open('r',encoding='utf-8-sig',newline='') as stream:
-            for ri,row in enumerate(csv.reader(stream),1):
+            for ri,row in enumerate(csv.reader(stream,delimiter=delimiter),1):
                 if ri>limits.max_rows_per_sheet or len(row)>limits.max_columns: raise ParseError('resource_limit')
                 if sum(len(x.encode('utf-8'))+1 for x in row)>limits.max_csv_row: raise ParseError('resource_limit')
                 cells+=len(row)
@@ -266,7 +293,10 @@ def parse_document(path:Path|str, request_id:str, options:dict|None=None, limits
         with path.open('r',encoding='utf-8-sig') as stream: obj=json.load(stream)
         _json_depth(obj,limits.max_json_depth); units=[('page','1',[('text',json.dumps(obj,ensure_ascii=False,indent=2)[:limits.max_text_chars])])]
     elif fmt=='xml': units=[('page','1',[('text',_xml_text(path,limits))])]
-    elif fmt=='csv': units=[('page','1',[('tablechunks',_csv_rows(path,limits))])]
+    elif fmt=='csv':
+        with path.open('r',encoding='utf-8-sig',newline='') as stream: delimiter=_detect_csv_delimiter(stream.read(8192))
+        if delimiter is None:raise ParseError('malformed_document')
+        units=[('page','1',[('tablechunks',_csv_rows(path,limits,delimiter))])]
     elif fmt=='rtf':
         from striprtf.striprtf import rtf_to_text
         units=[('page','1',[('text',rtf_to_text(_bounded_text(path,'ascii',limits.max_rtf_bytes,limits.max_rtf_bytes)))])]

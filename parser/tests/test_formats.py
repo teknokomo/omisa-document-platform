@@ -32,6 +32,63 @@ def test_representative_format_is_detected_from_bytes_and_schema_valid(fmt, tmp_
         validator.validate(record)
 
 
+@pytest.mark.parametrize('heading', [
+    '# Document processing: engineering, language design, and implementation',
+    '# **Architecture, formal specification, and implementation plan**',
+])
+def test_markdown_heading_with_commas_is_not_misclassified_as_csv(heading, tmp_path):
+    source = tmp_path / 'misleading.bin'
+    source.write_text(f'{heading}\n\nThis is ordinary Markdown prose.\nA second paragraph follows.\n')
+
+    records = parse_document(source, request_id='4'*32)
+
+    assert records[0]['document']['detected_format'] == 'md'
+    assert not any(record['type'] == 'table' for record in records)
+
+
+def test_large_markdown_heading_with_commas_is_detected_as_markdown(tmp_path):
+    target_size = 800_000
+    heading = '# **Architecture, formal specification, and implementation plan**\n\n'.encode()
+    paragraph = b'Ordinary Markdown prose without tabular delimiters.\n\n'
+    body = paragraph * ((target_size - len(heading)) // len(paragraph))
+    body += b'x' * (target_size - len(heading) - len(body))
+    source = tmp_path / 'large.bin'
+    source.write_bytes(heading + body)
+
+    records = parse_document(source, request_id='5'*32)
+
+    assert source.stat().st_size == target_size
+    assert records[0]['document']['detected_format'] == 'md'
+    assert not any(record['type'] == 'table' for record in records)
+
+
+@pytest.mark.parametrize('contents', [
+    'name,notes\nAlpha,"research, development"\nBeta,"quoted value"\n',
+    'name\tnotes\nAlpha\tresearch and development\nBeta\tquoted value\n',
+    'name;notes\nAlpha;research and development\nBeta;quoted value\n',
+    'item,notes\n1. First step,alpha\n2. Second step,beta\n',
+])
+def test_consistent_delimited_rows_are_still_detected_as_csv(contents, tmp_path):
+    source = tmp_path / 'misleading.bin'
+    source.write_text(contents)
+
+    records = parse_document(source, request_id='6'*32)
+
+    assert records[0]['document']['detected_format'] == 'csv'
+    table = next(record for record in records if record['type'] == 'table')
+    assert table['column_count'] == 2
+
+
+def test_unstructured_markdown_list_with_commas_is_not_misclassified_as_csv(tmp_path):
+    source = tmp_path / 'misleading.bin'
+    source.write_text('- First item, with details\n- Second item has additional, punctuation, and another phrase\n')
+
+    records = parse_document(source, request_id='7'*32)
+
+    assert records[0]['document']['detected_format'] == 'md'
+    assert not any(record['type'] == 'table' for record in records)
+
+
 def test_xlsx_preserves_sheet_table_cells_and_does_not_evaluate_formula():
     records = parse_document(FIX/'sample.xlsx', request_id='1'*32)
     assert any(r['type']=='unit' and r['unit_kind']=='sheet' for r in records)
